@@ -3,6 +3,8 @@
 #include <vector>
 
 namespace miit::algebra {
+    Task2::Task2(const Matrix<int>& mat) : Exercise(mat) {}
+
     std::string Task2::getDescription() const {
         return "Вставить после всех строк, содержащих минимальный элемент массива, строку 2, 4, 6,…";
     }
@@ -24,16 +26,17 @@ namespace miit::algebra {
             rowToInsert[j] = static_cast<int>((j + 1) * 2);
         }
 
-        for (int i = static_cast<int>(matrix.getRows()) - 1; i >= 0; --i) {
+        for (size_t i = matrix.getRows(); i > 0; --i) {
+            size_t rowIndex = i - 1;
             bool has_min = false;
             for (size_t j = 0; j < matrix.getCols(); ++j) {
-                if (matrix[i][j] == min_val) {
+                if (matrix[rowIndex][j] == min_val) {
                     has_min = true;
                     break;
                 }
             }
             if (has_min) {
-                matrix.insertRow(i + 1, rowToInsert);
+                matrix.insertRow(rowIndex + 1, rowToInsert);
             }
         }
     }

@@ -138,16 +138,16 @@ TEST(MatrixOperatorsTests, OperatorBrackets_OutOfRange)
 // ============================================================
 // 3. Тесты базовых методов (clone, toString, insert, remove)
 // ============================================================
-TEST(MatrixMethodsTests, Clone_CreatesExactCopy)
+TEST(MatrixMethodsTests, Copy_CreatesExactCopy)
 {
     Matrix<int> m1(2, 2);
     m1[0][1] = 77;
     
-    auto m2 = m1.clone();
-    EXPECT_EQ((size_t)2, m2->getRows());
-    EXPECT_EQ(77, (*m2)[0][1]);
+    Matrix<int> m2(m1);
+    EXPECT_EQ((size_t)2, m2.getRows());
+    EXPECT_EQ(77, m2[0][1]);
     
-    (*m2)[0][1] = 88;
+    m2[0][1] = 88;
     EXPECT_EQ(77, m1[0][1]);
 }
 
@@ -210,7 +210,7 @@ TEST(MatrixMethodsTests, InsertRow_InvalidIndex)
     
     EXPECT_THROW({
         m.insertRow(5, newRow);
-    }, std::invalid_argument);
+    }, std::out_of_range);
 }
 
 TEST(MatrixMethodsTests, RemoveRow_ValidIndex)
@@ -324,11 +324,10 @@ TEST(GeneratorsTests, ConstantGenerator_Zero)
     EXPECT_EQ(0, gen.generate());
 }
 
-TEST(GeneratorsTests, ConstantGenerator_ChangeValue)
+TEST(GeneratorsTests, ConstantGenerator_DefaultValue)
 {
-    ConstantGenerator gen(1);
-    gen.setValue(99);
-    EXPECT_EQ(99, gen.generate());
+    ConstantGenerator gen;
+    EXPECT_EQ(0, gen.generate());
 }
 
 TEST(GeneratorsTests, RandomGenerator_Range)
@@ -396,8 +395,7 @@ TEST(Task1Tests, Solve_BasicCase)
     m[0][0] = 1; m[0][1] = 9; m[0][2] = 2; // max 9, col 1
     m[1][0] = 3; m[1][1] = 4; m[1][2] = 8; // max 8, col 2
     
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -411,8 +409,7 @@ TEST(Task1Tests, Solve_NegativeNumbers)
     m[0][0] = -5; m[0][1] = -10; // max -5, col 0
     m[1][0] = -100; m[1][1] = -2; // max -2, col 1
     
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -425,8 +422,7 @@ TEST(Task1Tests, Solve_DuplicateMaximums)
     Matrix<int> m(1, 4);
     m[0][0] = 1; m[0][1] = 5; m[0][2] = 5; m[0][3] = 2; 
     
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -439,8 +435,7 @@ TEST(Task1Tests, Solve_SingleElement)
     Matrix<int> m(1, 1);
     m[0][0] = 99;
     
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     EXPECT_EQ(0, t.getMatrix()[0][0]);
@@ -449,8 +444,7 @@ TEST(Task1Tests, Solve_SingleElement)
 TEST(Task1Tests, Solve_EmptyMatrix)
 {
     Matrix<int> m;
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     EXPECT_EQ((size_t)0, t.getMatrix().getRows());
@@ -459,8 +453,7 @@ TEST(Task1Tests, Solve_EmptyMatrix)
 TEST(Task1Tests, Solve_AllZeros)
 {
     Matrix<int> m(2, 2); // все нули
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -470,7 +463,8 @@ TEST(Task1Tests, Solve_AllZeros)
 
 TEST(Task1Tests, GetDescription_IsNotEmpty)
 {
-    Task1 t;
+    Matrix<int> m;
+    Task1 t(m);
     std::string desc = t.getDescription();
     EXPECT_TRUE(desc.length() > 10);
 }
@@ -484,8 +478,7 @@ TEST(Task2Tests, Solve_BasicCase)
     m[0][0] = 5; m[0][1] = 9; m[0][2] = 8;
     m[1][0] = 2; m[1][1] = 1; m[1][2] = 4; // min is 1
     
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -504,8 +497,7 @@ TEST(Task2Tests, Solve_MultipleMinima)
     m[1][0] = 3; m[1][1] = 4;
     m[2][0] = 9; m[2][1] = 1; // min is 1
     
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -525,8 +517,7 @@ TEST(Task2Tests, Solve_AllElementsSame)
     m[0][0] = 0; m[0][1] = 0;
     m[1][0] = 0; m[1][1] = 0;
     
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -541,8 +532,7 @@ TEST(Task2Tests, Solve_MinAtStart)
     m[0][0] = -10; m[0][1] = 5;
     m[1][0] = 0; m[1][1] = 0;
     
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     const Matrix<int>& res = t.getMatrix();
@@ -555,8 +545,7 @@ TEST(Task2Tests, Solve_MinAtStart)
 TEST(Task2Tests, Solve_EmptyMatrix)
 {
     Matrix<int> m;
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     EXPECT_EQ((size_t)0, t.getMatrix().getRows());
@@ -564,7 +553,8 @@ TEST(Task2Tests, Solve_EmptyMatrix)
 
 TEST(Task2Tests, GetDescription_IsNotEmpty)
 {
-    Task2 t;
+    Matrix<int> m;
+    Task2 t(m);
     std::string desc = t.getDescription();
     EXPECT_TRUE(desc.length() > 10);
 }
@@ -583,8 +573,7 @@ TEST(IntegrationAndStressTests, StressTest_Task1_LargeMatrix)
     
     m[250][499] = 999; // Уникальный максимум
     
-    Task1 t;
-    t.setMatrix(m);
+    Task1 t(m);
     t.solve();
     
     EXPECT_EQ(499, t.getMatrix()[250][499]);
@@ -601,8 +590,7 @@ TEST(IntegrationAndStressTests, StressTest_Task2_LargeMatrix)
     
     // Делаем все элементы 5, значит минимум в каждой строке.
     // Размер увеличится вдвое.
-    Task2 t;
-    t.setMatrix(m);
+    Task2 t(m);
     t.solve();
     
     EXPECT_EQ((size_t)200, t.getMatrix().getRows());
@@ -618,12 +606,10 @@ TEST(IntegrationAndStressTests, Integration_MultipleOperations)
     m[0][0] = -1; // Минимум
     m[2][2] = 10; // Максимум
     
-    Task1 t1;
-    t1.setMatrix(m);
+    Task1 t1(m);
     t1.solve(); // В 2 строке 2 столбце заменит 10 на 2
     
-    Task2 t2;
-    t2.setMatrix(t1.getMatrix());
+    Task2 t2(t1.getMatrix());
     t2.solve(); // После 0 строки (где -1) вставит строку
     
     const Matrix<int>& res = t2.getMatrix();
@@ -637,8 +623,7 @@ TEST(IntegrationAndStressTests, Validation_OriginalUnchanged)
     Matrix<int> original(2, 2);
     original[0][0] = 5;
     
-    Task1 t;
-    t.setMatrix(original); 
+    Task1 t(original); 
     t.solve(); 
     
     // Исходная матрица не должна измениться

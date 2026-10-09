@@ -11,19 +11,10 @@
 
 using namespace miit::algebra;
 
-void demonstrateExercise(Exercise& exercise, const Matrix<int>& original, const std::string& taskName) {
-    std::cout << "\n=== " << taskName << " ===\n";
-    std::cout << "Описание: " << exercise.getDescription() << "\n\n";
-
-    std::cout << "Исходная матрица:\n";
-    std::cout << original.toString() << "\n";
-
-    exercise.setMatrix(original);
-    exercise.solve();
-
-    std::cout << "Результат:\n";
-    std::cout << exercise.getMatrix().toString() << "\n";
-}
+// Именованные константы для способов заполнения матрицы
+constexpr int FILL_RANDOM = 1;
+constexpr int FILL_MANUAL = 2;
+constexpr int FILL_CONSTANT = 3;
 
 int main() {
     // Включение кодировки UTF-8 (65001) в консоли Windows
@@ -33,11 +24,6 @@ int main() {
     std::cout << "=============================================\n";
     std::cout << "  Лабораторная работа 1 (Вариант 15)\n";
     std::cout << "=============================================\n";
-    std::cout << "";
-    
-    
-
-    
 
     try {
         std::cout << "\nВведите количество строк: ";
@@ -48,36 +34,54 @@ int main() {
         Matrix<int> matrix(rows, cols);
 
         std::cout << "\nВыберите способ заполнения:\n"
-                  << "1 - Случайные числа\n"
-                  << "2 - Ручной ввод\n"
-                  << "3 - Константа\n"
+                  << FILL_RANDOM << " - Случайные числа\n"
+                  << FILL_MANUAL << " - Ручной ввод\n"
+                  << FILL_CONSTANT << " - Константа\n"
                   << "Ваш выбор: ";
         int fillChoice; std::cin >> fillChoice;
 
-        if (fillChoice == 1) {
-            int minVal, maxVal;
-            std::cout << "Минимум: "; std::cin >> minVal;
-            std::cout << "Максимум: "; std::cin >> maxVal;
-            RandomGenerator gen(minVal, maxVal);
-            matrix.fill(gen);
-        } else if (fillChoice == 2) {
-            std::cout << "Введите элементы матрицы через пробел:\n";
-            IStreamGenerator gen(std::cin);
-            matrix.fill(gen);
-        } else {
-            std::cout << "Введите значение константы: ";
-            int val; std::cin >> val;
-            ConstantGenerator gen(val);
-            matrix.fill(gen);
+        switch (fillChoice) {
+            case FILL_RANDOM: {
+                int minVal, maxVal;
+                std::cout << "Минимум: "; std::cin >> minVal;
+                std::cout << "Максимум: "; std::cin >> maxVal;
+                RandomGenerator gen(minVal, maxVal);
+                matrix.fill(gen);
+                break;
+            }
+            case FILL_MANUAL: {
+                std::cout << "Введите элементы матрицы через пробел:\n";
+                IStreamGenerator gen(std::cin);
+                matrix.fill(gen);
+                break;
+            }
+            case FILL_CONSTANT: {
+                int val;
+                std::cout << "Введите значение константы: ";
+                std::cin >> val;
+                ConstantGenerator gen(val);
+                matrix.fill(gen);
+                break;
+            }
+            default: {
+                std::cout << "Неверный выбор способа заполнения!\n";
+                return 1;
+            }
         }
 
-        std::cout << "\nСозданная матрица:\n" << matrix.toString() << "\n";
+        std::cout << "\nИсходная матрица:\n" << matrix.toString() << "\n";
 
-        Task1 task1;
-        demonstrateExercise(task1, matrix, "Задача 1");
+        std::cout << "=== Задача 1 ===\n";
+        Task1 task1(matrix);
+        std::cout << "Описание: " << task1.getDescription() << "\n\n";
+        task1.solve();
+        std::cout << "Результат:\n" << task1.getMatrix().toString() << "\n";
 
-        Task2 task2;
-        demonstrateExercise(task2, matrix, "Задача 2");
+        std::cout << "=== Задача 2 ===\n";
+        Task2 task2(matrix);
+        std::cout << "Описание: " << task2.getDescription() << "\n\n";
+        task2.solve();
+        std::cout << "Результат:\n" << task2.getMatrix().toString() << "\n";
 
     } catch (const std::exception& e) {
         std::cerr << "Ошибка: " << e.what() << std::endl;

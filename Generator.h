@@ -24,7 +24,7 @@ namespace miit::algebra {
          * @brief Генерирует очередное целочисленное значение
          * @return Сгенерированное целое число
          */
-        virtual int generate() = 0;
+        virtual int generate() const = 0;
     };
 
 } // namespace miit::algebra

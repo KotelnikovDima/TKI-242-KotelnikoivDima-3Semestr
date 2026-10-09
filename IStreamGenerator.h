@@ -32,7 +32,7 @@ namespace miit::algebra {
          * @return Считанное целое число
          * @throws std::runtime_error если поток ввода находится в состоянии ошибки
          */
-        int generate() override;
+        int generate() const override;
     };
 
 } // namespace miit::algebra

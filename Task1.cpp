@@ -1,6 +1,8 @@
 #include "Task1.h"
 
 namespace miit::algebra {
+    Task1::Task1(const Matrix<int>& mat) : Exercise(mat) {}
+
     std::string Task1::getDescription() const {
         return "Заменить максимальный элемент каждой строки номером столбца, в котором он находится.";
     }

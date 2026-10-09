@@ -21,20 +21,15 @@ namespace miit::algebra {
 
     public:
         /**
-         * @brief Конструктор по умолчанию
+         * @brief Параметризованный конструктор
+         * @param mat Исходная матрица для выполнения задания
          */
-        Exercise() = default;
+        explicit Exercise(const Matrix<int>& mat);
 
         /**
          * @brief Виртуальный деструктор
          */
         virtual ~Exercise() = default;
-
-        /**
-         * @brief Устанавливает рабочую матрицу
-         * @param mat Исходная матрица
-         */
-        void setMatrix(const Matrix<int>& mat);
 
         /**
          * @brief Возвращает текущее состояние матрицы

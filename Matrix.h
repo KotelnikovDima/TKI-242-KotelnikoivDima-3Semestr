@@ -34,7 +34,7 @@ namespace miit::algebra {
          * @param rows Количество строк матрицы
          * @param cols Количество столбцов матрицы
          */
-        Matrix(size_t rows, size_t cols);
+        Matrix(const size_t rows, const size_t cols);
 
         /**
          * @brief Виртуальный деструктор по умолчанию
@@ -85,7 +85,7 @@ namespace miit::algebra {
          * @return Ссылка на вектор строки
          * @throws std::out_of_range если индекс строки вне диапазона
          */
-        std::vector<T>& operator[](size_t index);
+        std::vector<T>& operator[](const size_t index);
 
         /**
          * @brief Оператор индексации строки (константный)
@@ -93,27 +93,27 @@ namespace miit::algebra {
          * @return Константная ссылка на вектор строки
          * @throws std::out_of_range если индекс строки вне диапазона
          */
-        const std::vector<T>& operator[](size_t index) const;
+        const std::vector<T>& operator[](const size_t index) const;
 
         /**
          * @brief Циклический сдвиг элементов строк матрицы влево
          * @param shift Величина сдвига
          * @return Ссылка на текущую матрицу
          */
-        Matrix& operator<<(size_t shift);
+        Matrix& operator<<(const size_t shift);
 
         /**
          * @brief Циклический сдвиг элементов строк матрицы вправо
          * @param shift Величина сдвига
          * @return Ссылка на текущую матрицу
          */
-        Matrix& operator>>(size_t shift);
+        Matrix& operator>>(const size_t shift);
 
         /**
          * @brief Заполнение матрицы с помощью переданного генератора
          * @param generator Ссылка на объект Generator
          */
-        void fill(Generator& generator);
+        void fill(const Generator& generator);
 
         /**
          * @brief Преобразование содержимого матрицы в форматированную строку
@@ -122,26 +122,20 @@ namespace miit::algebra {
         std::string toString() const;
 
         /**
-         * @brief Создает глубокую копию матрицы в динамической памяти
-         * @return Умный указатель std::unique_ptr на новую копию матрицы
-         */
-        std::unique_ptr<Matrix<T>> clone() const;
-
-        /**
          * @brief Вставляет новую строку по указанному индексу
          * @param index Позиция для вставки новой строки
          * @param row Вектор вставляемых элементов (длина должна совпадать с количеством столбцов)
          * @throws std::invalid_argument если размер вставляемой строки не совпадает с числом столбцов
          * @throws std::out_of_range если индекс вставки выходит за границы
          */
-        void insertRow(size_t index, const std::vector<T>& row);
+        void insertRow(const size_t index, const std::vector<T>& row);
 
         /**
          * @brief Удаляет строку матрицы по указанному индексу
          * @param index Индекс удаляемой строки
          * @throws std::out_of_range если индекс выходит за границы диапазона строк
          */
-        void removeRow(size_t index);
+        void removeRow(const size_t index);
     };
 
 } // namespace miit::algebra

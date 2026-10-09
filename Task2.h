@@ -18,9 +18,10 @@ namespace miit::algebra {
     class Task2 : public Exercise {
     public:
         /**
-         * @brief Конструктор по умолчанию
+         * @brief Конструктор с параметром матрица
+         * @param mat Исходная матрица
          */
-        Task2() = default;
+        explicit Task2(const Matrix<int>& mat);
 
         /**
          * @brief Возвращает описание Задачи 2

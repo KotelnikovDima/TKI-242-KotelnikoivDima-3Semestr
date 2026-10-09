@@ -18,8 +18,8 @@ namespace miit::algebra {
      */
     class RandomGenerator : public Generator {
     private:
-        std::uniform_int_distribution<int> distribution; ///< Равномерное распределение
-        std::mt19937 generator;                         ///< Генератор случайных чисел
+        mutable std::uniform_int_distribution<int> distribution; ///< Равномерное распределение
+        mutable std::mt19937 generator;                         ///< Генератор случайных чисел
 
     public:
         /**
@@ -27,13 +27,13 @@ namespace miit::algebra {
          * @param min Минимальная граница диапазона генерации
          * @param max Максимальная граница диапазона генерации
          */
-        RandomGenerator(int min, int max);
+        RandomGenerator(const int min, const int max);
 
         /**
          * @brief Генерирует случайное число из заданного диапазона
          * @return Сгенерированное случайное целое число
          */
-        int generate() override;
+        int generate() const override;
     };
 
 } // namespace miit::algebra
